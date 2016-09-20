@@ -5,6 +5,10 @@ set background=dark
 let g:python_host_prog = '__PYTHON2__'
 let g:python3_host_prog = '__PYTHON3__'
 
+FileType html setlocal shiftwidth=2 tabstop=2
+FileType java setlocal shiftwidth=4 tabstop=4
+FileType js setlocal shiftwidth=2 tabstop=2
+
 " Plugins
 "if empty(globpath(&rtp, 'autoload/plug.vim'))
 "  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
