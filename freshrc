@@ -1,0 +1,20 @@
+# freshshell.com
+#
+# Examples:
+#
+#   fresh twe4ked/dotfiles shell/functions/\*
+#   fresh jasoncodes/dotfiles shell/aliases/rails.sh
+#   fresh jasoncodes/dotfiles config/tmux.conf --file
+#
+# See http://freshshell.com/readme for documentation.
+
+source ~/.fresh/build/shell.sh
+fresh freshshell/fresh bin/fresh --bin
+
+# Config Files
+fresh tmux.conf
+fresh vimrc
+fresh bashrc
+fresh inputrc
+fresh powerline.conf
+
