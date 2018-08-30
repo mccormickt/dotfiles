@@ -1,19 +1,28 @@
 set nowrap
 set number
-set background=dark
+set expandtab
+set smarttab
+set autoindent
+set smartindent
 
 let g:python_host_prog = '__PYTHON2__'
 let g:python3_host_prog = '__PYTHON3__'
+let g:C_Use_Tool_cmake = 'yes'
 
-FileType html setlocal shiftwidth=2 tabstop=2
-FileType java setlocal shiftwidth=4 tabstop=4
-FileType js setlocal shiftwidth=2 tabstop=2
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType java setlocal shiftwidth=4 tabstop=4
+autocmd FileType c setlocal shiftwidth=2 tabstop=2
+autocmd FileType go setlocal shiftwidth=4 tabstop=4
+autocmd FileType js setlocal shiftwidth=2 tabstop=2
+autocmd FileType v setlocal shiftwidth=2 tabstop=2
+
+map <C-n> :NERDTreeToggle<CR>
 
 " Plugins
-"if empty(globpath(&rtp, 'autoload/plug.vim'))
-"  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-"  autocmd VimEnter * PlugInstall
-"endif
+if empty(globpath(&rtp, 'autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
+endif
 
 call plug#begin('~/.vim/plugged')
 " Lightweight Markup Languages
@@ -38,15 +47,18 @@ Plug 'saltstack/salt-vim'
 " LaTeX
 Plug 'LaTeX-Box-Team/LaTeX-Box'
 
+" C/C++
+Plug 'vim-scripts/c.vim'
+
 " Go
 Plug 'fatih/vim-go'
-Plug 'zchee/deoplete-go'
 
 " Javascript
 Plug 'pangloss/vim-javascript'
+Plug 'scrooloose/syntastic'
+let g:syntastic_javascript_checkers = ['standard']
 
 " Generic
-Plug 'Shougo/deoplete.vim'
 Plug 'Konfekt/FastFold'
 Plug 'kien/ctrlp.vim'
 Plug 'airblade/vim-rooter'
@@ -57,6 +69,8 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 call plug#end()
 
