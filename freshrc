@@ -1,20 +1,8 @@
-# freshshell.com
-#
-# Examples:
-#
-#   fresh twe4ked/dotfiles shell/functions/\*
-#   fresh jasoncodes/dotfiles shell/aliases/rails.sh
-#   fresh jasoncodes/dotfiles config/tmux.conf --file
-#
-# See http://freshshell.com/readme for documentation.
-
-source ~/.fresh/build/shell.sh
+# Handles updating fresh
 fresh freshshell/fresh bin/fresh --bin
 
-# Config Files
-fresh tmux.conf
-fresh vimrc
-fresh bashrc
-fresh inputrc
-fresh powerline.conf
-
+#Config Files
+fresh tmccormick9/dotfiles vimrc --file
+fresh tmccormick9/dotfiles bashrc --file
+fresh tmccormick9/dotfiles tmux.conf --file
+fresh tmccormick9/dotfiles bash_it --file=~/.bash_it

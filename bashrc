@@ -31,3 +31,6 @@ export SCM_GIT_SHOW_DETAILS=false
 
 # Load Bash It
 source $BASH_IT/bash_it.sh
+
+# Load fresh
+source ~/.fresh/build/shell.sh
