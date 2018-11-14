@@ -4,6 +4,7 @@ set expandtab
 set smarttab
 set autoindent
 set smartindent
+colorscheme torte
 
 let g:python_host_prog = '__PYTHON2__'
 let g:python3_host_prog = '__PYTHON3__'
@@ -36,6 +37,7 @@ Plug 'alanhamlett/vim-jinja', {'commit': 'cb0ad0c43f4e753d44d0a8599f2be65dd1f24f
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'davidhalter/jedi-vim'
 Plug 'tmhedberg/SimpylFold'
+let g:syntastic_python_checkers = ['pylint']
 
 " Puppet
 Plug 'rodjek/vim-puppet'
@@ -61,13 +63,13 @@ let g:syntastic_javascript_checkers = ['standard']
 " Generic
 Plug 'Konfekt/FastFold'
 Plug 'kien/ctrlp.vim'
-Plug 'airblade/vim-rooter'
 Plug 'ervandew/supertab'
 Plug 'benekastah/neomake'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
+Plug 'vim-syntastic/syntastic'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
