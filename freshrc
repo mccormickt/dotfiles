@@ -2,7 +2,7 @@
 fresh freshshell/fresh bin/fresh --bin
 
 #Config Files
-fresh tmccormick9/dotfiles vimrc --file
-fresh tmccormick9/dotfiles bashrc --file
-fresh tmccormick9/dotfiles tmux.conf --file
-fresh tmccormick9/dotfiles bash_it --file=~/.bash_it
+fresh jan0ski/dotfiles vimrc --file
+fresh jan0ski/dotfiles bashrc --file
+fresh jan0ski/dotfiles tmux.conf --file
+fresh jan0ski/dotfiles bash_it --file=~/.bash_it
