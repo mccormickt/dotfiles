@@ -35,4 +35,8 @@ source $BASH_IT/bash_it.sh
 # Load fresh
 source ~/.fresh/build/shell.sh
 
+# Go environent
+export GOPATH=$(go env GOPATH)
+export PATH=$PATH:$GOPATH/bin
+
 PROMPT_DIRTRIM=3
