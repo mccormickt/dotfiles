@@ -43,6 +43,9 @@ let g:syntastic_python_checkers = ['pylint']
 Plug 'rodjek/vim-puppet'
 Plug 'godlygeek/tabular'
 
+" Rust
+Plug 'rust-lang/rust.vim'
+
 " SaltStack
 Plug 'saltstack/salt-vim'
 
