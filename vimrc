@@ -1,43 +1,60 @@
+" Show matching braces, etc.
+ set showmatch
+
+" Make it smart
 set nowrap
 set number
-set expandtab
-set smarttab
-set autoindent
+set ruler
 set smartindent
-colorscheme torte
+set smarttab
+set smartcase
+set autoindent
 
-let g:python_host_prog = '__PYTHON2__'
-let g:python3_host_prog = '__PYTHON3__'
-let g:C_Use_Tool_cmake = 'yes'
+" Default to soft tab
+set expandtab
 
-autocmd FileType html setlocal shiftwidth=2 tabstop=2
-autocmd FileType java setlocal shiftwidth=4 tabstop=4
-autocmd FileType c setlocal shiftwidth=2 tabstop=2
-autocmd FileType go setlocal shiftwidth=4 tabstop=4
-autocmd FileType js setlocal shiftwidth=2 tabstop=2
-autocmd FileType v setlocal shiftwidth=2 tabstop=2
+" Default to 2 spaces per tab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 
+" More history, mouse scrolling
+set history=100
+set mouse=a
+
+" Nerdtree keybinding
 map <C-n> :NERDTreeToggle<CR>
 
-" Plugins
+" Fix expansion mode
+set wildmode=list:longest
+set wildignore+=.git,.hg,.svn " Ignore version control repos
+set wildignore+=*.6           " Ignore Go compiled files
+set wildignore+=*.pyc         " Ignore Python compiled files
+set wildignore+=*.rbc         " Ignore Rubinius compiled files
+set wildignore+=*.swp         " Ignore vim backups
+set wildignore+=*.o           " Ignore C/C++ object files
+set wildignore+=*.beam        " Ignore Erlang beam
+set wildignore+=*.class       " Ignore Java class
+set wildignore+=node_modules  " Ignore npm install directory
+set wildignore+=*~            " Ignore backup files
+
+" Plugins - Installs vim-plug automatically if it doesn't exist
 if empty(globpath(&rtp, 'autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall
 endif
 
 call plug#begin('~/.vim/plugged')
+
 " Lightweight Markup Languages
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
-
-" Jinja2 Templates
-Plug 'alanhamlett/vim-jinja', {'commit': 'cb0ad0c43f4e753d44d0a8599f2be65dd1f24f04'}
+Plug 'tpope/vim-markdown'
 
 " Python
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'davidhalter/jedi-vim'
 Plug 'tmhedberg/SimpylFold'
-let g:syntastic_python_checkers = ['pylint']
 
 " Puppet
 Plug 'rodjek/vim-puppet'
@@ -58,6 +75,9 @@ Plug 'vim-scripts/c.vim'
 " Go
 Plug 'fatih/vim-go'
 
+" HCL
+Plug 'fatih/vim-hclfmt'
+
 " Javascript
 Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/syntastic'
@@ -76,8 +96,19 @@ Plug 'vim-syntastic/syntastic'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'lifepillar/vim-solarized8'
 
 call plug#end()
+
+" Set theme
+set background=dark
+colorscheme solarized8_high
+
+" Set linters
+let g:syntastic_python_checkers = ['pylint']
+
+" Disable some warnings
+let g:go_version_warning = 0
 
 " Strip trailing whitespace (and save cursor position) when saving files
 fun! <SID>StripTrailingWhitespaces()
