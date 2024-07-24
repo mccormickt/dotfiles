@@ -39,6 +39,8 @@ let g:terraform_fmt_on_save = 1
 
 " Generic
 Plug 'Konfekt/FastFold'
+Plug 'kien/ctrlp.vim'
+Plug 'benekastah/neomake'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-sensible'
@@ -49,6 +51,8 @@ Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'lifepillar/vim-solarized8'
 Plug 'joshdick/onedark.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'github/copilot.vim'
 
 call plug#end()
 

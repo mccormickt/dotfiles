@@ -1,0 +1,22 @@
+[user]
+	name = Tommy McCormick
+	email = mccormickt9@gmail.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCoSWtk4fb/3z5j7wvMt+A9kpCCWlaPm9Y9j64RlvYA
+[url "git@github.com:"]
+	insteadOf = "https://github.com/"
+[core]
+	autocrlf = input
+[init]
+	defaultBranch = main
+[commit]
+	gpgsign = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+[push]
+	autoSetupRemote = true
+
+# Work profile overrides
+[includeIf "gitdir:~/adversarial"]
+	path = ~/adversarial/.gitconfig
