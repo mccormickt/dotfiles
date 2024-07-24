@@ -50,7 +50,6 @@ let g:syntastic_javascript_checkers = ['standard']
 " Generic
 Plug 'Konfekt/FastFold'
 Plug 'kien/ctrlp.vim'
-Plug 'ervandew/supertab'
 Plug 'benekastah/neomake'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sleuth'
@@ -62,6 +61,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'lifepillar/vim-solarized8'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'github/copilot.vim'
 
 call plug#end()
 
