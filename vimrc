@@ -15,21 +15,16 @@ Plug 'jtratner/vim-flavored-markdown'
 " Python
 Plug 'davidhalter/jedi-vim'
 
-" Puppet
-Plug 'rodjek/vim-puppet'
-Plug 'godlygeek/tabular'
-
 " Rust
 Plug 'rust-lang/rust.vim'
-
-" SaltStack
-Plug 'saltstack/salt-vim'
+let g:rustfmt_autosave = 1
 
 " LaTeX
 Plug 'LaTeX-Box-Team/LaTeX-Box'
 
 " C/C++
 Plug 'vim-scripts/c.vim'
+Plug 'benekastah/neomake'
 
 " Go
 Plug 'fatih/vim-go'
@@ -39,29 +34,21 @@ let g:go_version_warning = 0
 " HCL
 Plug 'fatih/vim-hclfmt'
 Plug 'hashivim/vim-terraform'
-let g:terraform_align=1
-let g:terraform_fmt_on_save=1
-
-" Javascript
-Plug 'pangloss/vim-javascript'
-Plug 'scrooloose/syntastic'
-let g:syntastic_javascript_checkers = ['standard']
+let g:terraform_align = 1
+let g:terraform_fmt_on_save = 1
 
 " Generic
 Plug 'Konfekt/FastFold'
-Plug 'kien/ctrlp.vim'
-Plug 'ervandew/supertab'
-Plug 'benekastah/neomake'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
-Plug 'vim-syntastic/syntastic'
 Plug 'tpope/vim-repeat'
+Plug 'godlygeek/tabular'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'lifepillar/vim-solarized8'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'joshdick/onedark.vim'
 
 call plug#end()
 
@@ -75,13 +62,10 @@ set ruler
 set smartindent
 set smarttab
 set smartcase
-"set autoindent
 set paste
 
-" Default to soft tab
+" Default to soft tab, 4 spaces per tab
 set expandtab
-
-" Default to 2 spaces per tab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
@@ -108,7 +92,18 @@ set wildignore+=*~            " Ignore backup files
 
 " Set theme
 set background=dark
-colorscheme solarized8_high
+colorscheme onedark
+
+if (has("nvim"))
+  "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+if (has("termguicolors"))
+  set termguicolors
+endif
 
 " Disable soft tabbing for HTML/CSS/JS/YAML
  au BufNewFile,BufRead *.html setl noexpandtab
