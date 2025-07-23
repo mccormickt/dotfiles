@@ -1,0 +1,36 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+name = "Tommy McCormick"
+email = "mccormickt9@gmail.com"
+
+[signing]
+behavior = "own"
+backend = "ssh"
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCoSWtk4fb/3z5j7wvMt+A9kpCCWlaPm9Y9j64RlvYA"
+backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[ui]
+editor = "nvim"
+
+[git]
+auto-local-bookmark = true
+
+[templates]
+git_push_bookmark = '"mccormickt/push-" ++ change_id.short()'
+
+# Set email to work email when in work directory
+[[--scope]]
+--when.repositories = ["~/adversarial"]
+[--scope.user]
+email = "tommy@adversarial.com"
+
+# disable pagination for `jj status`, use `delta` for `jj diff` and `jj show`
+[[--scope]]
+--when.commands = ["status"]
+[--scope.ui]
+paginate = "never"
+[[--scope]]
+--when.commands = ["diff", "show"]
+[--scope.ui]
+pager = "delta"
