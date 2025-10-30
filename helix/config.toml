@@ -1,0 +1,11 @@
+theme = "onedark"
+
+[editor]
+auto-format = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+
+[editor.file-picker]
+hidden = false
