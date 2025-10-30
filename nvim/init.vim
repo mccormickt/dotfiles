@@ -1,5 +1,5 @@
 " Plugins - Installs vim-plug automatically if it doesn't exist
-if empty('~/.local/share/nvim/site/autoload/plug.vim')
+if !filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall
 endif
