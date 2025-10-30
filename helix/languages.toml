@@ -1,0 +1,24 @@
+# Rust analyzer custom settings
+[language-server.rust-analyzer.config]
+inlayHints.maxLength = 24
+inlayHints.bindingModeHints.enable = true
+inlayHints.discriminantHints.enable = "fieldless"
+inlayHints.lifetimeElisionHints.enable = "skip_trivial"
+inlayHints.lifetimeElisionHints.useParameterNames = true
+inlayHints.closureReturnTypeHints.enable = "always"
+cargo.allTargets = true
+cargo.allFeatures = true
+check.command = "clippy"
+check.allTargets = true
+check.allFeatures = true
+check.workspace = true
+
+# Terraform-ls custom settings to use OpenTofu
+[language-server.terraform-ls.config]
+terraform.path = "/opt/homebrew/bin/tofu"
+experimentalFeatures.prefillRequiredFields = true
+
+# Override HCL/Terraform formatter to use tofu
+[[language]]
+name = "hcl"
+formatter = { command = "tofu", args = ["fmt", "-"] }
