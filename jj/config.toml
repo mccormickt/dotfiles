@@ -1,4 +1,5 @@
 "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+ui-default-command = "log"
 
 [user]
 name = "Tommy McCormick"
@@ -15,9 +16,15 @@ editor = "nvim"
 
 [git]
 auto-local-bookmark = true
+sign-on-push = true
+write-change-id-header = true
 
-[templates]
-git_push_bookmark = '"mccormickt/push-" ++ change_id.short()'
+[revset-aliases]
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
+
+[aliases]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
 
 # Set email to work email when in work directory
 [[--scope]]
