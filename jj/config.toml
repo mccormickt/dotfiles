@@ -1,5 +1,4 @@
 "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
-ui-default-command = "log"
 
 [user]
 name = "Tommy McCormick"
@@ -9,15 +8,20 @@ email = "mccormickt9@gmail.com"
 behavior = "own"
 backend = "ssh"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCoSWtk4fb/3z5j7wvMt+A9kpCCWlaPm9Y9j64RlvYA"
-backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+# __OP_SSH_SIGN__ is replaced by install.sh per OS
+backends.ssh.program = "__OP_SSH_SIGN__"
 
 [ui]
 editor = "nvim"
+default-command = "log"
 
 [git]
 auto-local-bookmark = true
 sign-on-push = true
 write-change-id-header = true
+
+[remotes.origin]
+auto-track-bookmarks = 'glob:*'
 
 [revset-aliases]
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
@@ -25,6 +29,7 @@ write-change-id-header = true
 
 [aliases]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+spr = ["util", "exec", "--", "jj-spr"]
 
 # Set email to work email when in work directory
 [[--scope]]

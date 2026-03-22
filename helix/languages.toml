@@ -14,11 +14,17 @@ check.allFeatures = true
 check.workspace = true
 
 # Terraform-ls custom settings to use OpenTofu
+# __TOFU_PATH__ is replaced by install.sh per OS
 [language-server.terraform-ls.config]
-terraform.path = "/opt/homebrew/bin/tofu"
+terraform.path = "__TOFU_PATH__"
 experimentalFeatures.prefillRequiredFields = true
 
 # Override HCL/Terraform formatter to use tofu
 [[language]]
 name = "hcl"
 formatter = { command = "tofu", args = ["fmt", "-"] }
+
+[[language]]
+name = "toml"
+auto-format = true
+language-servers = ["tombi"]

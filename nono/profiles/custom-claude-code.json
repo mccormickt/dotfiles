@@ -1,0 +1,48 @@
+{
+  "extends": "claude-code",
+  "meta": {
+    "name": "custom-claude-code",
+    "version": "1.5.0",
+    "description": "Claude Code with jj, 1Password signing, gh CLI",
+    "author": "jan0ski"
+  },
+  "security": {
+    "groups": [
+      "go_runtime",
+      "user_caches_linux"
+    ],
+    "ipc_mode": "full"
+  },
+  "filesystem": {
+    "read": [
+      "$HOME/.config/jj",
+      "$HOME/.config/gh",
+      "$HOME/.config/op",
+      "$HOME/.1password",
+      "/opt/1Password"
+    ],
+    "read_file": [
+      "/etc/passwd",
+      "/etc/group",
+      "$HOME/.ssh/known_hosts",
+      "$HOME/.ssh/config"
+    ],
+    "write_file": [
+      "$HOME/.1password/agent.sock"
+    ],
+    "readwrite": [
+      "$HOME/.config/jj/repos"
+    ]
+  },
+  "policy": {
+    "override_deny": [
+      "$HOME/.config/op",
+      "$HOME/.1password"
+    ]
+  },
+  "rollback": {
+    "exclude_patterns": [
+      ".jj"
+    ]
+  }
+}
