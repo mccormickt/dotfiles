@@ -1,0 +1,54 @@
+{
+  "env": {
+    "ENABLE_LSP_TOOL": "1",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "hooks": {},
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "discord@claude-plugins-official": false,
+    "audit-context-building@trailofbits": true,
+    "differential-review@trailofbits": false,
+    "semgrep-rule-creator@trailofbits": false,
+    "static-analysis@trailofbits": false,
+    "testing-handbook-skills@trailofbits": false
+  },
+  "extraKnownMarketplaces": {
+    "trailofbits": {
+      "source": { "source": "github", "repo": "trailofbits/skills" },
+      "autoUpdate": true
+    },
+    "hegel-skill-marketplace": {
+      "source": { "source": "github", "repo": "hegeldev/hegel-skill" }
+    },
+    "beads-marketplace": {
+      "source": { "source": "github", "repo": "gastownhall/beads" }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "tui": "default",
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "model": "opus"
+}

@@ -1,60 +1,8 @@
-" Plugins - Installs vim-plug automatically if it doesn't exist
-if empty(globpath(&rtp, 'autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall
-endif
-
-call plug#begin('~/.vim/plugged')
-
-" Lightweight Markup Languages
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'tpope/vim-markdown'
-Plug 'jtratner/vim-flavored-markdown'
-
-" Python
-Plug 'davidhalter/jedi-vim'
-
-" Rust
-Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1
-
-" LaTeX
-Plug 'LaTeX-Box-Team/LaTeX-Box'
-
-" C/C++
-Plug 'vim-scripts/c.vim'
-Plug 'benekastah/neomake'
-
-" Go
-Plug 'fatih/vim-go'
 let g:go_fmt_command = "goimports"
 let g:go_version_warning = 0
-
-" HCL
-Plug 'fatih/vim-hclfmt'
-Plug 'hashivim/vim-terraform'
 let g:terraform_align = 1
 let g:terraform_fmt_on_save = 1
-
-" Generic
-Plug 'Konfekt/FastFold'
-Plug 'kien/ctrlp.vim'
-Plug 'benekastah/neomake'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
-Plug 'godlygeek/tabular'
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'lifepillar/vim-solarized8'
-Plug 'joshdick/onedark.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'github/copilot.vim'
-
-call plug#end()
 
 " Show matching braces, etc.
 set showmatch
