@@ -6,7 +6,20 @@
     },
     "linear": {
       "url": "https://mcp.linear.app/mcp"
+    },
+    "krpc": {
+      "command": "uvx",
+      "args": [
+        "--with",
+        "mcp<2",
+        "--from",
+        "git+https://github.com/Ljove02/krpc-mcp.git@4db0da4a12e289ff9bfd29c9299180cc6a1bb23f",
+        "python",
+        "-c",
+        "from krpc_mcp import server; server.ROOT_URL = 'https://krpc.github.io/krpc/0.6.0/python.html'; server.ALLOWED_PREFIX = 'https://krpc.github.io/krpc/0.6.0/python'; server.main()"
+      ]
     }
   },
-  "amp.remoteThreadCreation.enabled": false
+  "amp.remoteThreadCreation.enabled": false,
+  "amp.runner.env.enabled": true
 }

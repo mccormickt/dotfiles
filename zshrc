@@ -36,6 +36,9 @@ if command -v tofu &>/dev/null; then
     complete -o nospace -C "$(command -v tofu)" terraform
 fi
 
+# Jujutsu completions
+command -v jj &>/dev/null && source <(COMPLETE=zsh jj)
+
 # AgentFS
 [ -f "$HOME/.turso/env" ] && . "$HOME/.turso/env"
 command -v agentfs &>/dev/null && source <(COMPLETE=zsh agentfs)

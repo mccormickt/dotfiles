@@ -8,9 +8,18 @@ let
   onePasswordAgent = if isDarwin
     then "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
     else "$HOME/.1password/agent.sock";
-  onePasswordIdentityAgent = if isDarwin
-    then "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-    else "~/.1password/agent.sock";
+  vimPlugin = owner: repo: rev: hash:
+    pkgs.vimUtils.buildVimPlugin {
+      pname = repo;
+      version = builtins.substring 0 7 rev;
+      src = pkgs.fetchFromGitHub { inherit owner repo rev hash; };
+    };
+  vim-flavored-markdown = vimPlugin "jtratner" "vim-flavored-markdown"
+    "fbcd6f36bdb18ce5780d69187ac8d802ead02c7e" "sha256-mVTNe8JqtStgMG5J5K4XlW0nTisNY0T4Te42d8S/QoE=";
+  c-vim = vimPlugin "vim-scripts" "c.vim"
+    "69f0368c7d8dac196bd94ddfa80d98b1cedc7eb0" "sha256-hLKKed7gS6qr3wD2j/nca4kgQfLEfkJgAl0A9mwGgzo=";
+  vim-hclfmt = vimPlugin "fatih" "vim-hclfmt"
+    "1f3caf11253af6870451eb2af35b5616809cbc80" "sha256-1GmniVyu712IbbKQh0YxGivM+p4AiJbyieUJ1/JVlvA=";
   signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCoSWtk4fb/3z5j7wvMt+A9kpCCWlaPm9Y9j64RlvYA";
   dockerConfig = builtins.toJSON {
     credsStore = if isDarwin then "osxkeychain" else "secretservice";
@@ -34,7 +43,6 @@ in {
     packages = with pkgs; [
       _1password-cli
       ast-grep
-      awscli2
       buf
       delta
       docker
@@ -44,20 +52,19 @@ in {
       git-lfs
       go
       golangci-lint
-      google-cloud-sdk
       gopls
       gotools
       jq
-      kubectl
       nodejs
       opentofu
+      powerline
+      powerline-fonts
       python3
       ripgrep
-      rustup
       starpls
       terraform-ls
       tombi
-    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [ ghostty ];
+    ];
 
     sessionPath = [
       "$HOME/.amp/bin"
@@ -74,13 +81,13 @@ in {
     sessionVariables = {
       EDITOR = "hx";
       ENABLE_LSP_TOOL = "1";
-      CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
     };
 
     file = {
       ".actrc".source = ./actrc;
       ".config/amp/settings.json".source = ./amp/settings.json;
       ".config/AGENTS.md".source = ./agents/AGENTS.md;
+      ".config/opencode/AGENTS.md".source = ./agents/AGENTS.md;
       ".config/git/ignore".source = ./git/ignore;
       ".config/ghostty/config".source = ./ghostty/config;
       ".config/nono/profiles/custom-claude-code.json".source = ./nono/profiles/custom-claude-code.json;
@@ -124,6 +131,7 @@ in {
   '';
 
   programs.home-manager.enable = true;
+  fonts.fontconfig.enable = true;
 
   programs.git = {
     enable = true;
@@ -305,33 +313,32 @@ in {
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    settings = {
-      "*" = {
-        ForwardAgent = true;
-        IdentityAgent = onePasswordIdentityAgent;
-      };
-      aphrodite = { HostName = "aphrodite.jan0ski.net"; User = "root"; Port = 22; };
-      plex = { HostName = "plex.jan0ski.net"; User = "root"; Port = 22; };
-      freenas = { HostName = "freenas.jan0ski.net"; User = "root"; Port = 22; };
+    # Host blocks with private names and addresses stay in ~/.ssh/config.local.
+    includes = [ "config.local" ];
+    settings."*" = {
+      ForwardAgent = true;
+    } // lib.optionalAttrs isDarwin {
+      IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
     };
   };
 
   programs.tmux = {
     enable = true;
     baseIndex = 1;
+    clock24 = true;
     escapeTime = 0;
-    keyMode = "vi";
+    focusEvents = true;
     mouse = true;
     prefix = "C-a";
-    shell = "${pkgs.zsh}/bin/zsh";
+    terminal = "tmux-256color";
     plugins = [
       {
         plugin = pkgs.tmuxPlugins.catppuccin;
         extraConfig = "set -g @catppuccin_flavor 'mocha'";
       }
+      pkgs.tmuxPlugins.sensible
     ];
     extraConfig = ''
-      bind-key C-a send-prefix
       bind-key h split-window -c "#{pane_current_path}"
       bind-key v split-window -h -c "#{pane_current_path}"
       bind-key j split-window -c "#{pane_current_path}"
@@ -341,8 +348,8 @@ in {
       set-option -g renumber-windows on
       set-option -g automatic-rename on
       set-option -g set-titles on
-      set-option -g focus-events on
-      set-option -g default-terminal "xterm-256color"
+
+      run-shell "${pkgs.powerline}/bin/powerline-daemon -q; ${pkgs.powerline}/bin/powerline-config tmux setup"
     '';
   };
 
@@ -350,14 +357,14 @@ in {
     enable = true;
     defaultEditor = false;
     viAlias = false;
-    vimAlias = true;
+    vimAlias = false;
     withPython3 = true;
     withRuby = true;
     plugins = with pkgs.vimPlugins; [
-      vim-pandoc vim-pandoc-syntax vim-markdown jedi-vim rustaceanvim
-      latex-box neomake vim-go vim-hcl vim-terraform fastfold vim-fugitive
-      vim-sleuth vim-sensible vim-surround vim-repeat tabular nerdtree
-      nerdtree-git-plugin ale vim-solarized8 onedark-vim
+      vim-pandoc vim-pandoc-syntax vim-markdown vim-flavored-markdown jedi-vim
+      rustaceanvim latex-box c-vim neomake vim-go vim-hclfmt vim-terraform
+      fastfold vim-fugitive vim-sleuth vim-sensible vim-surround vim-repeat
+      tabular nerdtree nerdtree-git-plugin ale vim-solarized8 onedark-vim
     ];
     extraConfig = builtins.readFile ./nvim/init.vim;
   };
@@ -366,10 +373,11 @@ in {
   programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
-      vim-pandoc vim-pandoc-syntax vim-markdown jedi-vim rust-vim latex-box
-      neomake vim-go vim-hcl vim-terraform fastfold vim-fugitive vim-sleuth
-      vim-sensible vim-surround vim-repeat tabular nerdtree nerdtree-git-plugin
-      ale vim-solarized8 onedark-vim
+      vim-pandoc vim-pandoc-syntax vim-markdown vim-flavored-markdown jedi-vim
+      rust-vim latex-box c-vim neomake vim-go vim-hclfmt vim-terraform
+      vim-javascript syntastic fastfold vim-fugitive vim-sleuth vim-sensible
+      vim-surround vim-repeat tabular nerdtree nerdtree-git-plugin ale
+      vim-solarized8 onedark-vim
     ];
     extraConfig = builtins.readFile ./vimrc;
   };
@@ -382,12 +390,11 @@ in {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
     oh-my-zsh = {
       enable = true;
       theme = "gallifrey";
-      plugins = [ "git" "aws" "kubectl" "direnv" ];
+      plugins = if isDarwin then [ "git" "aws" "kubectl" "direnv" ] else [ "git" "direnv" ];
+      extraConfig = ''HYPHEN_INSENSITIVE="true"'';
     };
     shellAliases = {
       ".." = "cd ..";
@@ -397,10 +404,15 @@ in {
       terraform = "tofu";
       vim = "nvim";
     } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux { ls = "ls -F"; };
-    initContent = ''
-      if [[ -z "$SSH_TTY" && -S "${onePasswordAgent}" ]]; then
-        export SSH_AUTH_SOCK="${onePasswordAgent}"
-      fi
-    '' + builtins.readFile ./zshrc;
+    initContent = lib.mkMerge [
+      (lib.mkOrder 550 ''
+        fpath=("$HOME/.zsh/completions" $fpath)
+      '')
+      (''
+        if [[ -z "$SSH_TTY" && -S "${onePasswordAgent}" ]]; then
+          export SSH_AUTH_SOCK="${onePasswordAgent}"
+        fi
+      '' + builtins.readFile ./zshrc)
+    ];
   };
 }

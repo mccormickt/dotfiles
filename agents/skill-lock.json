@@ -15,18 +15,72 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/ast-grep/agent-skill.git",
       "skillPath": "ast-grep/skills/ast-grep/SKILL.md",
-      "skillFolderHash": "ef60f77564e2d47d0cba25a809daa3af8f0c469b",
+      "skillFolderHash": "1f1877bfb051fff6e6de5ebe529fb47758a03367",
       "installedAt": "2026-07-18T13:09:59.220Z",
-      "updatedAt": "2026-07-18T13:09:59.220Z"
+      "updatedAt": "2026-09-12T13:35:36.605Z"
     },
     "ast-grep-outline": {
       "source": "ast-grep/agent-skill",
       "sourceType": "github",
       "sourceUrl": "https://github.com/ast-grep/agent-skill.git",
       "skillPath": "ast-grep/skills/outline/SKILL.md",
-      "skillFolderHash": "86dfd5539de37734e98187c80cdb4b7081ee10bb",
+      "skillFolderHash": "7ee23d31b0578aa6702d8bbafa15749fc499a8c0",
       "installedAt": "2026-07-18T13:09:59.221Z",
-      "updatedAt": "2026-07-18T13:09:59.221Z"
+      "updatedAt": "2026-09-12T13:35:37.979Z"
+    },
+    "ponytail": {
+      "source": "dietrichgebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dietrichgebert/ponytail.git",
+      "skillPath": "skills/ponytail/SKILL.md",
+      "skillFolderHash": "cb6e53477eaf04e6daeca22feacb85f9ce20d40c",
+      "installedAt": "2026-09-12T13:35:27.495Z",
+      "updatedAt": "2026-09-12T13:35:27.495Z"
+    },
+    "ponytail-audit": {
+      "source": "dietrichgebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dietrichgebert/ponytail.git",
+      "skillPath": "skills/ponytail-audit/SKILL.md",
+      "skillFolderHash": "f62f3a49debd14effa6d339b309f0bc531b9b232",
+      "installedAt": "2026-09-12T13:35:27.496Z",
+      "updatedAt": "2026-10-07T11:59:33.353Z"
+    },
+    "ponytail-debt": {
+      "source": "dietrichgebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dietrichgebert/ponytail.git",
+      "skillPath": "skills/ponytail-debt/SKILL.md",
+      "skillFolderHash": "c9bf71ce830bce18e5bbe277828d56ff20eb3dfb",
+      "installedAt": "2026-09-12T13:35:27.497Z",
+      "updatedAt": "2026-10-07T11:59:34.514Z"
+    },
+    "ponytail-gain": {
+      "source": "dietrichgebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dietrichgebert/ponytail.git",
+      "skillPath": "skills/ponytail-gain/SKILL.md",
+      "skillFolderHash": "87c6e7af7ab9dfbfb0729cc571ef2937cf731206",
+      "installedAt": "2026-09-12T13:35:27.497Z",
+      "updatedAt": "2026-10-07T11:59:35.753Z"
+    },
+    "ponytail-help": {
+      "source": "dietrichgebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dietrichgebert/ponytail.git",
+      "skillPath": "skills/ponytail-help/SKILL.md",
+      "skillFolderHash": "2eff8ae6e3f1aa1aa97166c6d3a81e5c89c4165e",
+      "installedAt": "2026-09-12T13:35:27.498Z",
+      "updatedAt": "2026-10-07T11:59:36.909Z"
+    },
+    "ponytail-review": {
+      "source": "dietrichgebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dietrichgebert/ponytail.git",
+      "skillPath": "skills/ponytail-review/SKILL.md",
+      "skillFolderHash": "6edfcf161c997fdd3089bce4e5682a921fb59b46",
+      "installedAt": "2026-09-12T13:35:27.498Z",
+      "updatedAt": "2026-10-07T11:59:38.020Z"
     }
   },
   "dismissed": {
@@ -34,17 +88,17 @@
   },
   "lastSelectedAgents": [
     "amp",
-    "antigravity",
-    "antigravity-cli",
     "cline",
     "codex",
     "cursor",
-    "deepagents",
+    "droid",
     "gemini-cli",
     "github-copilot",
+    "kilo",
     "kimi-code-cli",
     "opencode",
     "warp",
-    "zed"
+    "zed",
+    "claude-code"
   ]
 }

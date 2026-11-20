@@ -1,0 +1,27 @@
+{ pkgs, ... }:
+
+{
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
+
+  users.users.jan0ski = {
+    isNormalUser = true;
+    extraGroups = [ "docker" "wheel" ];
+    shell = pkgs.zsh;
+  };
+
+  programs.zsh.enable = true;
+  services.tailscale.enable = true;
+  virtualisation.docker.enable = true;
+
+  environment.systemPackages = [ pkgs.ghostty ];
+  fonts.packages = [ pkgs.powerline-fonts ];
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.jan0ski.imports = [ ../home.nix ../home/tools.nix ];
+  };
+
+  system.stateVersion = "25.11";
+}
