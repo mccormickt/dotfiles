@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, dockerCredentialStore, lib, pkgs, ... }:
 
 let
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
@@ -19,7 +19,7 @@ let
   c-vim = vimPlugin "vim-scripts" "c.vim"
     "69f0368c7d8dac196bd94ddfa80d98b1cedc7eb0" "sha256-hLKKed7gS6qr3wD2j/nca4kgQfLEfkJgAl0A9mwGgzo=";
   dockerConfig = builtins.toJSON {
-    credsStore = if isDarwin then "osxkeychain" else "secretservice";
+    credsStore = dockerCredentialStore;
     credHelpers = {
       "asia.gcr.io" = "gcloud";
       "cgr.dev" = "cgr";
@@ -32,6 +32,7 @@ let
     };
   };
 in {
+  _module.args.dockerCredentialStore = lib.mkDefault (if isDarwin then "osxkeychain" else "secretservice");
   home = {
     username = "jan0ski";
     homeDirectory = if isDarwin then "/Users/jan0ski" else "/home/jan0ski";
@@ -94,7 +95,10 @@ in {
       exit 1
     fi
     if [[ -e "$HOME/.docker/config.json" ]] && ! ${pkgs.jq}/bin/jq -es \
-      'length == 1 and (.[0] | type == "object" and (.credHelpers == null or (.credHelpers | type == "object")))' \
+      'def helper: type == "string" and length > 0;
+       length == 1 and (.[0] | type == "object" and
+         ((has("credsStore") | not) or (.credsStore | helper)) and
+         (.credHelpers == null or (.credHelpers | type == "object" and all(.[]; helper))))' \
       "$HOME/.docker/config.json" >/dev/null 2>&1; then
       echo 'Invalid Docker configuration.' >&2
       exit 1
@@ -115,7 +119,8 @@ in {
 
       docker_tmp=$(${pkgs.coreutils}/bin/mktemp "$docker_dir/config.json.XXXXXX")
       ${pkgs.jq}/bin/jq --argjson managed '${dockerConfig}' \
-        '. * $managed | .credHelpers = ((.credHelpers // {}) + $managed.credHelpers)' \
+        'if has("credsStore") then . else .credsStore = $managed.credsStore |
+          .credHelpers = ($managed.credHelpers + (.credHelpers // {})) end' \
         "$docker_config" > "$docker_tmp"
       ${pkgs.coreutils}/bin/chmod 600 "$docker_tmp"
       ${pkgs.coreutils}/bin/mv "$docker_tmp" "$docker_config"

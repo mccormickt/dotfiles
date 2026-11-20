@@ -20,7 +20,11 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.jan0ski.imports = [ ../home.nix ../home/tools.nix ];
+    users.jan0ski = {
+      imports = [ ../home.nix ../home/tools.nix ];
+      _module.args.dockerCredentialStore = "pass";
+      home.packages = [ pkgs.pass pkgs.gnupg ];
+    };
   };
 
   system.stateVersion = "25.11";

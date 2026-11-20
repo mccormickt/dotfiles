@@ -58,13 +58,13 @@ Resolve jj merge conflicts in the current workspace after a rebase operation.
 jj conflicts look like this:
 
 ```
-<<<<<<< conflict N of M
-+++++++ [destination commit info]
-content from destination (what we rebased onto)
-%%%%%%% diff from: [base] to: [our branch]
-+lines we added
--lines we removed
->>>>>>> conflict N of M ends
+  <<<<<<< conflict N of M
+  +++++++ [destination commit info]
+  content from destination (what we rebased onto)
+  %%%%%%% diff from: [base] to: [our branch]
+  +lines we added
+  -lines we removed
+  >>>>>>> conflict N of M ends
 ```
 
 1. Read each conflicted file

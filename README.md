@@ -87,7 +87,8 @@ Nix store. Resolve 1Password references at runtime with `op run`, `op read`, or
 Before the first switch, copy private SSH host blocks to `~/.ssh/config.local`
 (mode 0600). Do not copy a catch-all forwarding rule. SSH includes this file
 first; opt in to `ForwardAgent yes` only for named, trusted hosts. SSH keeps
-a working inherited agent or falls back to the local 1Password socket.
+`SSH_AUTH_SOCK` if it names a socket; otherwise it uses the local 1Password
+socket if present. This check does not contact the agent or inspect its keys.
 
 Move Git `user.name`, `user.email`, `user.signingKey`, and any work-specific
 includes to `~/.gitconfig-local`. Move jj `user.name`, `user.email`, `signing.key`,
@@ -97,11 +98,18 @@ files, not flake inputs. Signing stays enabled. Ubuntu and macOS require the
 signing key or a public signing key with its private key in a reachable SSH
 agent. Test a signed commit in a disposable repository before pushing.
 
-Docker configuration remains mutable so `docker login` can update it. Home
-Manager adds the native credential store and the existing GCR, Artifact
-Registry, and Chainguard helpers without copying registry credentials into the
-Nix store. Existing inline credentials must be migrated once with `docker
-logout` followed by `docker login` for each registry. The `cgr` helper still
+Docker configuration remains mutable. If `credsStore` is already configured,
+Home Manager leaves the selection and registry mappings alone. Otherwise it
+adds the platform default and cloud registry defaults, preserving explicit
+per-registry helpers. Ubuntu uses Secret Service and macOS uses Keychain.
+Headless NixOS uses `docker-credential-pass` with `pass` and GnuPG. Before
+login, provision your own GPG encryption key and run `pass init <fingerprint>`
+in your user session. Keep the private key and password store outside Git and
+Nix. Without that setup, login fails rather than using inline storage.
+
+Existing credentials are not migrated. To change helpers, log out using the
+old helper, select and initialize the new one, then log in again. Migrate
+existing inline credentials before switching profiles. The `cgr` helper
 requires `docker-credential-cgr` from Chainguard's `chainctl` installation.
 
 Home Manager does not manage credentials, command history, caches, downloaded

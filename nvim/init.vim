@@ -1,6 +1,7 @@
 let g:rustfmt_autosave = 1
 let g:go_fmt_command = "goimports"
 let g:go_version_warning = 0
+let g:terraform_binary_path = 'tofu'
 let g:terraform_align = 1
 let g:terraform_fmt_on_save = 1
 
@@ -30,7 +31,6 @@ set ruler
 set smartindent
 set smarttab
 set smartcase
-set paste
 
 " Default to soft tab, 4 spaces per tab
 set expandtab
