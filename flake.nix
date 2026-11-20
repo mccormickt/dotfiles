@@ -29,14 +29,20 @@
           modules = [ home-manager.nixosModules.home-manager ./nixos ] ++ modules;
         };
     in {
-      homeConfigurations = {
+      homeConfigurations = rec {
         zeus = mkHome "x86_64-linux" [ ./home.nix ./hosts/zeus/home.nix ];
+        jan0ski-linux = zeus;
         jan0ski-darwin = mkHome "aarch64-darwin" [ ./home.nix ./home/tools.nix ];
       };
 
-      systemConfigs.zeus = system-manager.lib.makeSystemConfig {
-        modules = [ ./hosts/zeus/system.nix ];
-      };
+      checks.x86_64-linux.system-manager-preview = let
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        preview = system-manager.lib.makeSystemConfig { modules = [ ./hosts/zeus/system.nix ]; };
+      in pkgs.runCommand "system-manager-preview" {} ''
+        mkdir -p "$out"
+        ${pkgs.jq}/bin/jq -e 'keys | select(. == ["sysinit-reactivation.target", "system-manager-path.service", "system-manager.target"])' \
+          ${preview}/services/services.json > "$out/units.json"
+      '';
 
       nixosConfigurations = {
         zeus = mkNixos [ ./hosts/zeus/nixos.nix ];

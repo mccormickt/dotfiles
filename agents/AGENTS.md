@@ -21,7 +21,7 @@ Use **Jujutsu** (`jj`) as the primary version control system. Jujutsu is a Git-c
 | `git log` | `jj log` | Shows commit graph |
 | `git add -p && git commit` | `jj split -i` | Split working copy interactively |
 | `git commit -m "msg"` | `jj describe -m "msg"` | Describe current commit |
-| `git commit --amend` | `jj squash` | Squash changes into parent |
+| `git commit --amend` | Edit the working copy in place | Use `jj describe` to change its message |
 | `git checkout <branch>` | `jj new <bookmark>` | Create new commit on bookmark |
 | `git branch <name>` | `jj bookmark create <name>` | Create bookmark (not branch) |
 | `git rebase -i` | `jj rebase -r <rev> -d <dest>` | Rebase specific commits |
@@ -74,4 +74,3 @@ content from destination (what we rebased onto)
    - Combine both sets of changes
    - Remove ALL conflict markers
 3. Run `jj status` to verify conflicts are resolved
-

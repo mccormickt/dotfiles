@@ -4,12 +4,21 @@
 { ... }:
 
 {
+  programs.git.settings.gpg.ssh.program = "/opt/1Password/op-ssh-sign";
+  programs.jujutsu.settings.signing.backends.ssh.program = "/opt/1Password/op-ssh-sign";
+
+  home.sessionPath = [
+    "$HOME/.amp/bin" "$HOME/.bun/bin" "$HOME/.cargo/bin" "$HOME/.krew/bin"
+    "$HOME/.local/bin" "$HOME/go/bin" "$HOME/.local/share/pnpm"
+  ];
+
   targets.genericLinux = {
     enable = true;
     gpu.enable = false;
   };
 
   programs.zsh.initContent = ''
+    [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
     export PATH="$PATH:/usr/local/go/bin"
 
     # Nix

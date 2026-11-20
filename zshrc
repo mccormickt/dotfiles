@@ -65,4 +65,3 @@ sclaude() {
 }
 
 [ -f "$HOME/.svix/bin/env" ] && . "$HOME/.svix/bin/env"
-[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"

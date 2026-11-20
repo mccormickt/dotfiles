@@ -27,7 +27,6 @@ set smartindent
 set smarttab
 set smartcase
 "set autoindent
-set paste
 
 " Default to softab, 4 spaces per tab
 set expandtab

@@ -4,7 +4,7 @@ let
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   opSshSign = if isDarwin
     then "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
-    else "/opt/1Password/op-ssh-sign";
+    else "${pkgs.openssh}/bin/ssh-keygen";
   onePasswordAgent = if isDarwin
     then "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
     else "$HOME/.1password/agent.sock";
@@ -18,9 +18,6 @@ let
     "fbcd6f36bdb18ce5780d69187ac8d802ead02c7e" "sha256-mVTNe8JqtStgMG5J5K4XlW0nTisNY0T4Te42d8S/QoE=";
   c-vim = vimPlugin "vim-scripts" "c.vim"
     "69f0368c7d8dac196bd94ddfa80d98b1cedc7eb0" "sha256-hLKKed7gS6qr3wD2j/nca4kgQfLEfkJgAl0A9mwGgzo=";
-  vim-hclfmt = vimPlugin "fatih" "vim-hclfmt"
-    "1f3caf11253af6870451eb2af35b5616809cbc80" "sha256-1GmniVyu712IbbKQh0YxGivM+p4AiJbyieUJ1/JVlvA=";
-  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCoSWtk4fb/3z5j7wvMt+A9kpCCWlaPm9Y9j64RlvYA";
   dockerConfig = builtins.toJSON {
     credsStore = if isDarwin then "osxkeychain" else "secretservice";
     credHelpers = {
@@ -64,19 +61,8 @@ in {
       starpls
       terraform-ls
       tombi
+      uv
     ];
-
-    sessionPath = [
-      "$HOME/.amp/bin"
-      "$HOME/.bun/bin"
-      "$HOME/.cargo/bin"
-      "$HOME/.krew/bin"
-      "$HOME/.local/bin"
-      "$HOME/go/bin"
-    ] ++ lib.optionals isDarwin [
-      "$HOME/Library/pnpm"
-      "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [ "$HOME/.local/share/pnpm" ];
 
     sessionVariables = {
       EDITOR = "hx";
@@ -102,6 +88,19 @@ in {
     };
   };
 
+  home.activation.checkDockerConfig = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
+    if [[ -L "$HOME/.docker" || -L "$HOME/.docker/config.json" ]]; then
+      echo 'Refusing to write through a symlinked Docker configuration.' >&2
+      exit 1
+    fi
+    if [[ -e "$HOME/.docker/config.json" ]] && ! ${pkgs.jq}/bin/jq -es \
+      'length == 1 and (.[0] | type == "object" and (.credHelpers == null or (.credHelpers | type == "object")))' \
+      "$HOME/.docker/config.json" >/dev/null 2>&1; then
+      echo 'Invalid Docker configuration.' >&2
+      exit 1
+    fi
+  '';
+
   home.activation.configureDocker = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     docker_dir="${config.home.homeDirectory}/.docker"
     docker_config="$docker_dir/config.json"
@@ -112,11 +111,6 @@ in {
 
       if [ ! -e "$docker_config" ]; then
         ${pkgs.coreutils}/bin/printf '{}\n' > "$docker_config"
-      fi
-
-      if [ -L "$docker_config" ]; then
-        echo "Refusing to replace symlinked Docker configuration: $docker_config" >&2
-        exit 1
       fi
 
       docker_tmp=$(${pkgs.coreutils}/bin/mktemp "$docker_dir/config.json.XXXXXX")
@@ -137,11 +131,6 @@ in {
     enable = true;
     lfs.enable = true;
     settings = {
-      user = {
-        name = "Tommy McCormick";
-        email = "mccormickt9@gmail.com";
-        signingKey = signingKey;
-      };
       url."git@github.com:".insteadOf = "https://github.com/";
       core = {
         autocrlf = "input";
@@ -152,7 +141,7 @@ in {
       commit.gpgSign = true;
       gpg = {
         format = "ssh";
-        ssh.program = opSshSign;
+        ssh.program = lib.mkDefault opSshSign;
       };
       push.autoSetupRemote = true;
       pull.rebase = true;
@@ -164,10 +153,6 @@ in {
       };
     };
     includes = [
-      {
-        condition = "gitdir:~/adversarial/";
-        path = "~/adversarial/.gitconfig";
-      }
       { path = "~/.gitconfig-local"; }
     ];
   };
@@ -186,15 +171,10 @@ in {
   programs.jujutsu = {
     enable = true;
     settings = {
-      user = {
-        name = "Tommy McCormick";
-        email = "mccormickt9@gmail.com";
-      };
       signing = {
         behavior = "drop";
         backend = "ssh";
-        key = signingKey;
-        backends.ssh.program = opSshSign;
+        backends.ssh.program = lib.mkDefault opSshSign;
       };
       ui = {
         editor = "hx";
@@ -211,10 +191,6 @@ in {
         spr = [ "util" "exec" "--" "jj-spr" ];
       };
       "--scope" = [
-        {
-          "--when".repositories = [ "~/adversarial" ];
-          user.email = "tommy@adversarial.com";
-        }
         {
           "--when".commands = [ "status" ];
           ui.paginate = "never";
@@ -315,10 +291,12 @@ in {
     enableDefaultConfig = false;
     # Host blocks with private names and addresses stay in ~/.ssh/config.local.
     includes = [ "config.local" ];
-    settings."*" = {
-      ForwardAgent = true;
-    } // lib.optionalAttrs isDarwin {
-      IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+    settings = {
+      local-agent = {
+        header = ''Match exec "test ! -S \"$SSH_AUTH_SOCK\" && test -S \"${onePasswordAgent}\""'';
+        IdentityAgent = if isDarwin then "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"" else "~/.1password/agent.sock";
+      };
+      "*".ForwardAgent = false;
     };
   };
 
@@ -362,7 +340,7 @@ in {
     withRuby = true;
     plugins = with pkgs.vimPlugins; [
       vim-pandoc vim-pandoc-syntax vim-markdown vim-flavored-markdown jedi-vim
-      rustaceanvim latex-box c-vim neomake vim-go vim-hclfmt vim-terraform
+      rustaceanvim latex-box c-vim neomake vim-go vim-hcl vim-terraform
       fastfold vim-fugitive vim-sleuth vim-sensible vim-surround vim-repeat
       tabular nerdtree nerdtree-git-plugin ale vim-solarized8 onedark-vim
     ];
@@ -374,7 +352,7 @@ in {
     enable = true;
     plugins = with pkgs.vimPlugins; [
       vim-pandoc vim-pandoc-syntax vim-markdown vim-flavored-markdown jedi-vim
-      rust-vim latex-box c-vim neomake vim-go vim-hclfmt vim-terraform
+      rust-vim latex-box c-vim neomake vim-go vim-hcl vim-terraform
       vim-javascript syntastic fastfold vim-fugitive vim-sleuth vim-sensible
       vim-surround vim-repeat tabular nerdtree nerdtree-git-plugin ale
       vim-solarized8 onedark-vim
@@ -409,7 +387,7 @@ in {
         fpath=("$HOME/.zsh/completions" $fpath)
       '')
       (''
-        if [[ -z "$SSH_TTY" && -S "${onePasswordAgent}" ]]; then
+        if [[ ! -S "$SSH_AUTH_SOCK" && -S "${onePasswordAgent}" ]]; then
           export SSH_AUTH_SOCK="${onePasswordAgent}"
         fi
       '' + builtins.readFile ./zshrc)
