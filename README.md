@@ -98,11 +98,11 @@ files, not flake inputs. Signing stays enabled. Ubuntu and macOS require the
 signing key or a public signing key with its private key in a reachable SSH
 agent. Test a signed commit in a disposable repository before pushing.
 
-Docker configuration remains mutable. If `credsStore` is already configured,
+Docker configuration remains mutable. If `credsStore` is a nonempty string,
 Home Manager leaves the selection and registry mappings alone. Otherwise it
 adds the platform default and cloud registry defaults, preserving explicit
 per-registry helpers. Ubuntu uses Secret Service and macOS uses Keychain.
-Headless NixOS uses `docker-credential-pass` with `pass` and GnuPG. Before
+Headless NixOS uses `docker-credential-pass` with `pass` and GnuPG's terminal pinentry. Before
 login, provision your own GPG encryption key and run `pass init <fingerprint>`
 in your user session. Keep the private key and password store outside Git and
 Nix. Without that setup, login fails rather than using inline storage.

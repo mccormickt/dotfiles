@@ -97,7 +97,7 @@ in {
     if [[ -e "$HOME/.docker/config.json" ]] && ! ${pkgs.jq}/bin/jq -es \
       'def helper: type == "string" and length > 0;
        length == 1 and (.[0] | type == "object" and
-         ((has("credsStore") | not) or (.credsStore | helper)) and
+         (.credsStore | . == null or type == "string") and
          (.credHelpers == null or (.credHelpers | type == "object" and all(.[]; helper))))' \
       "$HOME/.docker/config.json" >/dev/null 2>&1; then
       echo 'Invalid Docker configuration.' >&2
@@ -119,7 +119,7 @@ in {
 
       docker_tmp=$(${pkgs.coreutils}/bin/mktemp "$docker_dir/config.json.XXXXXX")
       ${pkgs.jq}/bin/jq --argjson managed '${dockerConfig}' \
-        'if has("credsStore") then . else .credsStore = $managed.credsStore |
+        'if (.credsStore | length) > 0 then . else .credsStore = $managed.credsStore |
           .credHelpers = ($managed.credHelpers + (.credHelpers // {})) end' \
         "$docker_config" > "$docker_tmp"
       ${pkgs.coreutils}/bin/chmod 600 "$docker_tmp"
